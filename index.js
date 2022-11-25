@@ -15,11 +15,11 @@
         querySnapshot.forEach(doc  => {
           const task=doc.data()
           html+=`
-          <div> 
+          <div class="card card-body mt-2 border-primary"> 
               <h3>${task.title}</h3>
               <p>${task.description}</p>
-              <button class='btn-delete' data-id="${doc.id}">Delete</button>
-              <button class='btn-edit' data-id="${doc.id}">Edit</button>
+              <button class="btn btn-primary btn-delete" data-id="${doc.id}">Delete</button>
+              <button class="btn btn-secondary btn-edit" data-id="${doc.id}">Edit</button>
           </div>
           `;
         });
