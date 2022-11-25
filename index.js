@@ -1,9 +1,10 @@
-      import {saveTask, getTasks, onGetTasks, deleteTask, getTask} from './firebase.js'
+      import {saveTask, getTasks, onGetTasks, deleteTask, getTask, updateTask} from './firebase.js'
 
       const taskForm=document.getElementById('task-form');
       const tasksContainer=document.getElementById('tasks-container');
 
       let editStatus=false;
+      let id='';
 
       window.addEventListener('DOMContentLoaded', async () => {
 
@@ -25,14 +26,14 @@
 
         tasksContainer.innerHTML=html;
 
-        const btnsDelete= tasksContainer.querySelectorAll('.btn-delete')
+        const btnsDelete= tasksContainer.querySelectorAll('.btn-delete');
 
         btnsDelete.forEach(btn =>{
           btn.addEventListener('click', ({target: {dataset}}) =>{
-            deleteTask(dataset.id)
+            deleteTask(dataset.id);
 
-          })
-        })
+          });
+        });
 
         const btnsEdit= tasksContainer.querySelectorAll('.btn-edit')
         btnsEdit.forEach((btn) =>{
@@ -44,8 +45,11 @@
             taskForm['task-description'].value= task.description
 
             editStatus=true;
-          })
-        })
+            id=doc.id
+
+            taskForm['btn-task-save'].innerText='Update'
+          });
+        });
 
       });
 
@@ -53,15 +57,17 @@
 
 
       taskForm.addEventListener('submit', (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         const title = taskForm['task-title'];
         const description = taskForm['task-description'];
 
-        if(editStatus){
-          console.log(updating)
+        if(!editStatus){
+          saveTask(title.value, description.value);
         } else{
-        saveTask(title.value, description.value);
+          updateTask(id, {title:title.value, description:description.value});
+
+          editStatus= false;
         }
         taskForm.reset();
 
